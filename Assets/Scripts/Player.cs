@@ -4,9 +4,13 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [Header("Settings")] public float JumpForce;
+    [Header("Settings")]
+    public float JumpForce;
 
-    [Header("References")] public Rigidbody2D PlayerRigidBody;
+    [Header("References")]
+    public Rigidbody2D PlayerRigidBody;
+
+    public Animator PlayerAnimator;
 
     private bool isGrounded = true;
 
@@ -22,6 +26,7 @@ public class Player : MonoBehaviour
         {
             PlayerRigidBody.AddForceY(JumpForce, ForceMode2D.Impulse);
             isGrounded = false;
+            PlayerAnimator.SetInteger("state", 1);
         }
     }
 
@@ -29,6 +34,11 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.name == "Platform")
         {
+            if (!isGrounded)
+            {
+                PlayerAnimator.SetInteger("state", 2);
+            }
+
             isGrounded = true;
         }
     }
