@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -18,8 +16,8 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             PlayerRigidBody.AddForceY(JumpForce, ForceMode2D.Impulse);
-            isGrounded = false;
             PlayerAnimator.SetInteger("state", 1);
+            isGrounded = false;
         }
     }
 
