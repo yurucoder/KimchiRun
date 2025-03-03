@@ -5,15 +5,15 @@ public class Mover : MonoBehaviour
     [Header("Settings")]
     public float moveSpeed;
 
-    private Vector3 speed;
+    private Vector3 _moveVector;
 
     private void Start()
     {
-        speed = Vector3.left * moveSpeed;
+        _moveVector = Vector3.left * moveSpeed;
     }
 
     private void Update()
     {
-        transform.position += speed * Time.deltaTime;
+        transform.position += _moveVector * Time.deltaTime;
     }
 }

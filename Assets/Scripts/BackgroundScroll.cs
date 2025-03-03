@@ -8,11 +8,11 @@ public class BackgroundScroll : MonoBehaviour
     [Header("References")]
     public MeshRenderer meshRenderer;
 
-    private Vector2 bgVector;
+    private Vector2 _bgVector;
 
     private void Update()
     {
-        bgVector.Set(scrollSpeed * Time.deltaTime, 0);
-        meshRenderer.material.mainTextureOffset += bgVector;
+        _bgVector.Set(scrollSpeed * Time.deltaTime, 0);
+        meshRenderer.material.mainTextureOffset += _bgVector;
     }
 }

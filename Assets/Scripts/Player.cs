@@ -3,24 +3,23 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [Header("Settings")]
-    public float JumpForce;
+    public float jumpForce;
 
     [Header("References")]
-    public Rigidbody2D PlayerRigidBody;
-    public Animator PlayerAnimator;
-    public BoxCollider2D PlayerCollider;
+    public Rigidbody2D playerRigidBody;
+    public Animator playerAnimator;
+    public BoxCollider2D playerCollider;
 
-    private bool isGrounded = true;
-    private int lives = 3;
-    private bool isInvincible = false;
+    private bool _isGrounded = true;
+    private bool _isInvincible = false;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
         {
-            PlayerRigidBody.AddForceY(JumpForce, ForceMode2D.Impulse);
-            PlayerAnimator.SetInteger("state", 1);
-            isGrounded = false;
+            playerRigidBody.AddForceY(jumpForce, ForceMode2D.Impulse);
+            playerAnimator.SetInteger("state", 1);
+            _isGrounded = false;
         }
     }
 
@@ -28,12 +27,12 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.name == "Platform")
         {
-            if (!isGrounded)
+            if (!_isGrounded)
             {
-                PlayerAnimator.SetInteger("state", 2);
+                playerAnimator.SetInteger("state", 2);
             }
 
-            isGrounded = true;
+            _isGrounded = true;
         }
     }
 
@@ -41,46 +40,37 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (!isInvincible)
+            if (!_isInvincible)
             {
                 Destroy(collision.gameObject);
-                Hit();
+                GameManager.instance.lives -= 1;
             }
         }
         else if (collision.gameObject.CompareTag("Food"))
         {
             Destroy(collision.gameObject);
-            if (lives < 3)
+            if (GameManager.instance.lives < 3)
             {
-                lives += 1;
+                GameManager.instance.lives += 1;
             }
         }
         else if (collision.gameObject.CompareTag("Golden"))
         {
             Destroy(collision.gameObject);
-            isInvincible = true;
+            _isInvincible = true;
             Invoke(nameof(StopInvincible), 5f);
-        }
-    }
-
-    private void Hit()
-    {
-        lives -= 1;
-        if (lives <= 0)
-        {
-            KillPlayer();
         }
     }
 
     private void StopInvincible()
     {
-        isInvincible = false;
+        _isInvincible = false;
     }
 
-    private void KillPlayer()
+    public void KillPlayer()
     {
-        PlayerCollider.enabled = false;
-        PlayerAnimator.enabled = false;
-        PlayerRigidBody.AddForceY(JumpForce, ForceMode2D.Impulse);
+        playerCollider.enabled = false;
+        playerAnimator.enabled = false;
+        playerRigidBody.AddForceY(jumpForce, ForceMode2D.Impulse);
     }
 }
