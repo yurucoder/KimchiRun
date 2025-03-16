@@ -1247,7 +1247,7 @@ MonoBehaviour:
   enemySpawner: {fileID: 1991971531}
   foodSpawner: {fileID: 2036722418}
   goldenSpawner: {fileID: 928081924}
-  playerScript: {fileID: 0}
+  player: {fileID: 1482291893}
 --- !u!4 &1923264758
 Transform:
   m_ObjectHideFlags: 0
