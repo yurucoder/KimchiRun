@@ -1808,7 +1808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170ecfbdad3bf4da98f19027f89e3aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 0.3
+  scrollSpeed: 1
   meshRenderer: {fileID: 1838038573}
 --- !u!61 &1838038577
 BoxCollider2D:
