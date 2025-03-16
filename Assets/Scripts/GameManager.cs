@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,13 +15,16 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameState gameState = GameState.Intro;
     public int lives = 3;
+    public float playStartTime;
 
     [Header("References")]
     public GameObject introUI;
+    public GameObject deadUI;
     public GameObject enemySpawner;
     public GameObject foodSpawner;
     public GameObject goldenSpawner;
     public Player player;
+    public TMP_Text scoreText;
 
     private void Awake()
     {
@@ -36,6 +41,14 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (gameState == GameState.Playing)
+        {
+            scoreText.text = "Score: " + Mathf.FloorToInt(CalculateScore());
+        }
+        else if (gameState == GameState.Dead)
+        {
+            scoreText.text = "High Score: " + GetHighScore();
+        }
         if (gameState == GameState.Intro && Input.GetKeyDown(KeyCode.Space))
         {
             introUI.SetActive(false);
@@ -43,18 +56,42 @@ public class GameManager : MonoBehaviour
             foodSpawner.SetActive(true);
             goldenSpawner.SetActive(true);
             gameState = GameState.Playing;
+            playStartTime = Time.time;
         }
         if (gameState == GameState.Playing && lives <= 0)
         {
             player.KillPlayer();
+            SaveHighScore();
             enemySpawner.SetActive(false);
             foodSpawner.SetActive(false);
             goldenSpawner.SetActive(false);
+            deadUI.SetActive(true);
             gameState = GameState.Dead;
         }
         if (gameState == GameState.Dead && Input.GetKeyDown(KeyCode.Space))
         {
             SceneManager.LoadScene("main");
+        }
+    }
+
+    private float CalculateScore()
+    {
+        return Time.time - playStartTime;
+    }
+
+    private int GetHighScore()
+    {
+        return PlayerPrefs.GetInt("highScore");
+    }
+
+    private void SaveHighScore()
+    {
+        int score = Mathf.FloorToInt(CalculateScore());
+        int currentHighScore = PlayerPrefs.GetInt("highScore");
+        if (score > currentHighScore)
+        {
+            PlayerPrefs.SetInt("highScore", score);
+            PlayerPrefs.Save();
         }
     }
 }
